@@ -23,22 +23,30 @@
   <main id="login-screen" class="content">
     <div class="card login-card">
       <span class="material-icons login-icon">lock_open</span>
-      <h2 class="login-title">로그인</h2>
-      <p class="login-desc">
-        이메일로 로그인 링크를 받아 시작하세요.<br>
-        비밀번호 없이 간편하게 로그인할 수 있습니다.
-      </p>
-      <input
-        type="email"
-        id="email-input"
-        class="text-field"
-        placeholder="이메일 주소 입력"
-        autocomplete="email"
-      >
-      <button id="login-btn" class="btn-contained login-submit-btn">
-        <span class="material-icons" aria-hidden="true">send</span>
-        <span>로그인 링크 받기</span>
-      </button>
+      <h2 class="login-title">오늘 할일</h2>
+
+      <!-- 로그인 / 회원가입 탭 -->
+      <div class="auth-tabs">
+        <button class="auth-tab active" data-tab="login">로그인</button>
+        <button class="auth-tab" data-tab="signup">회원가입</button>
+      </div>
+
+      <!-- 입력 필드 -->
+      <input type="email" id="email-input" class="text-field" placeholder="이메일" autocomplete="email">
+      <input type="password" id="password-input" class="text-field" placeholder="비밀번호" autocomplete="current-password">
+
+      <!-- 로그인 버튼 -->
+      <button id="login-btn" class="btn-contained login-submit-btn">로그인</button>
+
+      <!-- 회원가입 버튼 (기본 숨김) -->
+      <button id="signup-btn" class="btn-contained login-submit-btn" hidden>회원가입</button>
+
+      <!-- Magic Link (로그인 탭에서만 표시) -->
+      <div id="magic-link-section" class="magic-link-section">
+        <div class="auth-divider"><span>또는</span></div>
+        <button id="magic-link-btn" class="btn-outlined-primary">이메일 링크로 로그인</button>
+      </div>
+
       <p id="login-msg" class="login-msg"></p>
     </div>
   </main>

@@ -82,8 +82,13 @@ if (typeof document !== 'undefined') {
   const loginScreen   = document.getElementById('login-screen');
   const appScreen     = document.getElementById('app-screen');
   const emailInput    = document.getElementById('email-input');
+  const passwordInput = document.getElementById('password-input');
   const loginBtn      = document.getElementById('login-btn');
+  const signupBtn     = document.getElementById('signup-btn');
   const loginMsg      = document.getElementById('login-msg');
+  const magicSection  = document.getElementById('magic-link-section');
+  const magicBtn      = document.getElementById('magic-link-btn');
+  const authTabs      = document.querySelectorAll('.auth-tab');
   const appBarAuth    = document.getElementById('app-bar-auth');
   const userEmailEl   = document.getElementById('user-email');
   const logoutBtn     = document.getElementById('logout-btn');
@@ -112,29 +117,95 @@ if (typeof document !== 'undefined') {
     }
   });
 
-  // ── 로그인 (Magic Link) ────────────────────────────────────────────────
+  // ── 인증 헬퍼 ─────────────────────────────────────────────────────────
+  function authError(msg) {
+    const map = {
+      'Invalid login credentials':     '이메일 또는 비밀번호가 올바르지 않습니다.',
+      'Email not confirmed':           '이메일 인증이 필요합니다. 메일함을 확인해주세요.',
+      'User already registered':       '이미 등록된 이메일입니다. 로그인 탭을 이용해주세요.',
+      'Password should be at least 6': '비밀번호는 6자 이상이어야 합니다.',
+      'rate limit':                    '요청이 너무 많습니다. 잠시 후 다시 시도해주세요.',
+    };
+    for (const [key, val] of Object.entries(map)) {
+      if (msg.includes(key)) return val;
+    }
+    return msg;
+  }
+
+  function setMsg(text, type = '') {
+    loginMsg.className = `login-msg${type ? ` login-msg--${type}` : ''}`;
+    loginMsg.textContent = text;
+  }
+
+  // ── 탭 전환 (로그인 ↔ 회원가입) ──────────────────────────────────────
+  authTabs.forEach(tab => {
+    tab.addEventListener('click', () => {
+      authTabs.forEach(t => t.classList.remove('active'));
+      tab.classList.add('active');
+      const isLogin = tab.dataset.tab === 'login';
+      loginBtn.hidden            = !isLogin;
+      signupBtn.hidden           = isLogin;
+      magicSection.hidden        = !isLogin;
+      passwordInput.placeholder  = isLogin ? '비밀번호' : '비밀번호 (6자 이상)';
+      passwordInput.autocomplete = isLogin ? 'current-password' : 'new-password';
+      setMsg('');
+    });
+  });
+
+  // ── 로그인 (비밀번호) ──────────────────────────────────────────────────
   loginBtn.addEventListener('click', async () => {
+    const email    = emailInput.value.trim();
+    const password = passwordInput.value;
+    if (!email || !password) return;
+    loginBtn.disabled = true;
+    setMsg('로그인 중...');
+    const { error } = await db.auth.signInWithPassword({ email, password });
+    loginBtn.disabled = false;
+    if (error) setMsg(authError(error.message), 'error');
+  });
+
+  // ── 회원가입 (비밀번호) ────────────────────────────────────────────────
+  signupBtn.addEventListener('click', async () => {
+    const email    = emailInput.value.trim();
+    const password = passwordInput.value;
+    if (!email || !password) return;
+    signupBtn.disabled = true;
+    setMsg('회원가입 중...');
+    const { error } = await db.auth.signUp({ email, password });
+    signupBtn.disabled = false;
+    if (error) {
+      setMsg(authError(error.message), 'error');
+    } else {
+      setMsg('✓ 가입 완료! 확인 이메일을 발송했습니다. 메일함을 확인 후 로그인해주세요.', 'success');
+    }
+  });
+
+  // ── 로그인 링크 (Magic Link) ───────────────────────────────────────────
+  magicBtn.addEventListener('click', async () => {
     const email = emailInput.value.trim();
     if (!email) return;
-    loginBtn.disabled = true;
-    loginMsg.className = 'login-msg';
-    loginMsg.textContent = '링크를 전송하는 중...';
+    magicBtn.disabled = true;
+    setMsg('링크를 전송하는 중...');
     const { error } = await db.auth.signInWithOtp({
       email,
       options: { emailRedirectTo: location.href },
     });
-    loginBtn.disabled = false;
+    magicBtn.disabled = false;
     if (error) {
-      loginMsg.className = 'login-msg login-msg--error';
-      loginMsg.textContent = `오류: ${error.message}`;
+      setMsg(authError(error.message), 'error');
     } else {
-      loginMsg.className = 'login-msg login-msg--success';
-      loginMsg.textContent = `✓ ${email} 으로 로그인 링크를 발송했습니다. 메일함을 확인해주세요.`;
+      setMsg(`✓ ${email} 으로 로그인 링크를 발송했습니다. 메일함을 확인해주세요.`, 'success');
       emailInput.value = '';
     }
   });
 
-  emailInput.addEventListener('keydown', e => { if (e.key === 'Enter') loginBtn.click(); });
+  // Enter: 이메일 → 비밀번호 포커스, 비밀번호 → 현재 탭 액션 실행
+  emailInput.addEventListener('keydown', e => { if (e.key === 'Enter') passwordInput.focus(); });
+  passwordInput.addEventListener('keydown', e => {
+    if (e.key !== 'Enter') return;
+    const isLogin = [...authTabs].find(t => t.classList.contains('active'))?.dataset.tab === 'login';
+    if (isLogin) loginBtn.click(); else signupBtn.click();
+  });
 
   // ── 로그아웃 ───────────────────────────────────────────────────────────
   logoutBtn.addEventListener('click', () => db.auth.signOut());

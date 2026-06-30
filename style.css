@@ -350,8 +350,8 @@ body {
 /* ── 로그인 화면 ─────────────────────────────────────────────────────── */
 .login-card {
   max-width: 400px;
-  margin: 80px auto 0;
-  padding: 40px 32px;
+  margin: 48px auto 0;
+  padding: 32px 32px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -360,7 +360,7 @@ body {
 }
 
 .login-icon {
-  font-size: 48px;
+  font-size: 40px;
   color: var(--md-primary);
 }
 
@@ -391,6 +391,73 @@ body {
 
 .login-msg--error   { color: var(--md-error); }
 .login-msg--success { color: #2E7D32; }
+
+/* ── 인증 탭 (로그인 / 회원가입) ────────────────────────────────────── */
+.auth-tabs {
+  display: flex;
+  width: 100%;
+  border: 2px solid var(--md-primary);
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.auth-tab {
+  flex: 1;
+  padding: 9px 0;
+  border: none;
+  background: none;
+  font-family: 'Roboto', sans-serif;
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: .5px;
+  cursor: pointer;
+  color: var(--md-primary);
+  transition: background .15s, color .15s;
+}
+
+.auth-tab.active {
+  background: var(--md-primary);
+  color: var(--md-on-primary);
+}
+
+/* ── 구분선 (또는) ───────────────────────────────────────────────────── */
+.magic-link-section { width: 100%; }
+
+.auth-divider {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  color: var(--md-on-surface-dis);
+  font-size: .75rem;
+}
+
+.auth-divider::before,
+.auth-divider::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--md-divider);
+}
+
+/* ── 아웃라인 버튼 (Magic Link) ──────────────────────────────────────── */
+.btn-outlined-primary {
+  width: 100%;
+  height: 40px;
+  border: 2px solid var(--md-primary);
+  border-radius: 4px;
+  background: none;
+  color: var(--md-primary);
+  font-family: 'Roboto', sans-serif;
+  font-size: .875rem;
+  font-weight: 500;
+  letter-spacing: .5px;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-outlined-primary:hover    { background: var(--md-primary-light); }
+.btn-outlined-primary:disabled { opacity: .5; cursor: default; }
 
 /* ── 반응형 ─────────────────────────────────────────────────────────────
    모바일 (<480px): 간격 좁히기, 앱바 아이콘 숨기기
