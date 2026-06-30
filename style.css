@@ -312,11 +312,92 @@ body {
   letter-spacing: .4px;
 }
 
+/* ── App Bar 인증 영역 ───────────────────────────────────────────────── */
+.app-bar-spacer { flex: 1; }
+
+.app-bar-auth {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.user-email-label {
+  font-size: .75rem;
+  opacity: .85;
+  max-width: 180px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.btn-text-light {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, .5);
+  border-radius: 4px;
+  color: var(--md-on-primary);
+  font-family: 'Roboto', sans-serif;
+  font-size: .75rem;
+  font-weight: 500;
+  letter-spacing: .5px;
+  padding: 4px 12px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background .15s;
+}
+
+.btn-text-light:hover { background: rgba(255, 255, 255, .15); }
+
+/* ── 로그인 화면 ─────────────────────────────────────────────────────── */
+.login-card {
+  max-width: 400px;
+  margin: 80px auto 0;
+  padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  text-align: center;
+}
+
+.login-icon {
+  font-size: 48px;
+  color: var(--md-primary);
+}
+
+.login-title {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--md-on-surface);
+}
+
+.login-desc {
+  font-size: .875rem;
+  color: var(--md-on-surface-med);
+  line-height: 1.6;
+}
+
+.login-submit-btn {
+  width: 100%;
+  justify-content: center;
+  height: 44px;
+  font-size: .9375rem;
+}
+
+.login-msg {
+  min-height: 1.5em;
+  font-size: .875rem;
+  color: var(--md-on-surface-med);
+}
+
+.login-msg--error   { color: var(--md-error); }
+.login-msg--success { color: #2E7D32; }
+
 /* ── 반응형 ─────────────────────────────────────────────────────────────
    모바일 (<480px): 간격 좁히기, 앱바 아이콘 숨기기
 ─────────────────────────────────────────────────────────────────────── */
 @media (max-width: 479px) {
-  .app-bar-icon { display: none; }
+  .app-bar-icon    { display: none; }
+  .user-email-label { display: none; }
 
   .content { padding: 16px 12px 32px; }
 
@@ -331,5 +412,10 @@ body {
     height: 28px;
     padding: 0 10px;
     font-size: .8rem;
+  }
+
+  .login-card {
+    margin-top: 40px;
+    padding: 32px 20px;
   }
 }
