@@ -114,6 +114,19 @@ if (typeof document !== 'undefined') {
       loginScreen.hidden = false;
       appScreen.hidden = true;
       todos = [];
+      // 폼 초기화
+      emailInput.value = '';
+      passwordInput.value = '';
+      loginBtn.disabled = false;
+      signupBtn.disabled = false;
+      setMsg('');
+      // 로그인 탭으로 복원
+      authTabs.forEach(t => t.classList.remove('active'));
+      authTabs[0].classList.add('active');
+      loginBtn.hidden = false;
+      signupBtn.hidden = true;
+      magicSection.hidden = false;
+      passwordInput.placeholder = '비밀번호';
     }
   });
 
