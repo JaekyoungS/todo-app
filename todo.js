@@ -86,8 +86,6 @@ if (typeof document !== 'undefined') {
   const loginBtn      = document.getElementById('login-btn');
   const signupBtn     = document.getElementById('signup-btn');
   const loginMsg      = document.getElementById('login-msg');
-  const magicSection  = document.getElementById('magic-link-section');
-  const magicBtn      = document.getElementById('magic-link-btn');
   const authTabs      = document.querySelectorAll('.auth-tab');
   const appBarAuth    = document.getElementById('app-bar-auth');
   const userEmailEl   = document.getElementById('user-email');
@@ -130,7 +128,6 @@ if (typeof document !== 'undefined') {
       authTabs[0].classList.add('active');
       loginBtn.hidden = false;
       signupBtn.hidden = true;
-      magicSection.hidden = false;
       passwordInput.placeholder = '비밀번호';
     }
   });
@@ -163,7 +160,6 @@ if (typeof document !== 'undefined') {
       const isLogin = tab.dataset.tab === 'login';
       loginBtn.hidden            = !isLogin;
       signupBtn.hidden           = isLogin;
-      magicSection.hidden        = !isLogin;
       passwordInput.placeholder  = isLogin ? '비밀번호' : '비밀번호 (6자 이상)';
       passwordInput.autocomplete = isLogin ? 'current-password' : 'new-password';
       setMsg('');
@@ -195,25 +191,6 @@ if (typeof document !== 'undefined') {
       setMsg(authError(error.message), 'error');
     } else {
       setMsg('✓ 가입 완료! 확인 이메일을 발송했습니다. 메일함을 확인 후 로그인해주세요.', 'success');
-    }
-  });
-
-  // ── 로그인 링크 (Magic Link) ───────────────────────────────────────────
-  magicBtn.addEventListener('click', async () => {
-    const email = emailInput.value.trim();
-    if (!email) return;
-    magicBtn.disabled = true;
-    setMsg('링크를 전송하는 중...');
-    const { error } = await db.auth.signInWithOtp({
-      email,
-      options: { emailRedirectTo: location.href },
-    });
-    magicBtn.disabled = false;
-    if (error) {
-      setMsg(authError(error.message), 'error');
-    } else {
-      setMsg(`✓ ${email} 으로 로그인 링크를 발송했습니다. 메일함을 확인해주세요.`, 'success');
-      emailInput.value = '';
     }
   });
 
