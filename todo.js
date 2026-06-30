@@ -110,7 +110,10 @@ if (typeof document !== 'undefined') {
       render();
       input.focus();
     } else {
+      // 앱 바 초기화
       appBarAuth.hidden = true;
+      userEmailEl.textContent = '';
+      // 앱 화면 전환
       loginScreen.hidden = false;
       appScreen.hidden = true;
       todos = [];

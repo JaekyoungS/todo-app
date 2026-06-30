@@ -26,6 +26,9 @@
 /* ── 리셋 ─────────────────────────────────────────────────────────────── */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+/* hidden 속성이 author CSS(display:flex 등)에 덮이지 않도록 강제 */
+[hidden] { display: none !important; }
+
 body {
   font-family: 'Roboto', sans-serif;
   background: var(--md-background);
