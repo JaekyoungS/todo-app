@@ -82,8 +82,9 @@ if (typeof document !== 'undefined') {
   const loginScreen   = document.getElementById('login-screen');
   const appScreen     = document.getElementById('app-screen');
   const emailInput    = document.getElementById('email-input');
-  const passwordInput = document.getElementById('password-input');
-  const loginBtn      = document.getElementById('login-btn');
+  const passwordInput  = document.getElementById('password-input');
+  const confirmInput   = document.getElementById('confirm-password-input');
+  const loginBtn       = document.getElementById('login-btn');
   const signupBtn     = document.getElementById('signup-btn');
   const loginMsg      = document.getElementById('login-msg');
   const authTabs      = document.querySelectorAll('.auth-tab');
@@ -120,6 +121,8 @@ if (typeof document !== 'undefined') {
       // 폼 초기화
       emailInput.value = '';
       passwordInput.value = '';
+      confirmInput.value = '';
+      confirmInput.hidden = true;
       loginBtn.disabled = false;
       signupBtn.disabled = false;
       setMsg('');
@@ -160,6 +163,7 @@ if (typeof document !== 'undefined') {
       const isLogin = tab.dataset.tab === 'login';
       loginBtn.hidden            = !isLogin;
       signupBtn.hidden           = isLogin;
+      confirmInput.hidden        = isLogin;
       passwordInput.placeholder  = isLogin ? '비밀번호' : '비밀번호 (6자 이상)';
       passwordInput.autocomplete = isLogin ? 'current-password' : 'new-password';
       setMsg('');
@@ -182,7 +186,13 @@ if (typeof document !== 'undefined') {
   signupBtn.addEventListener('click', async () => {
     const email    = emailInput.value.trim();
     const password = passwordInput.value;
-    if (!email || !password) return;
+    const confirm  = confirmInput.value;
+    if (!email || !password || !confirm) return;
+    if (password !== confirm) {
+      setMsg('비밀번호가 일치하지 않습니다.', 'error');
+      confirmInput.focus();
+      return;
+    }
     signupBtn.disabled = true;
     setMsg('회원가입 중...');
     const { error } = await db.auth.signUp({ email, password });
@@ -194,13 +204,14 @@ if (typeof document !== 'undefined') {
     }
   });
 
-  // Enter: 이메일 → 비밀번호 포커스, 비밀번호 → 현재 탭 액션 실행
+  // Enter: 이메일 → 비밀번호, 비밀번호 → 확인(회원가입) 또는 로그인 실행, 확인 → 회원가입 실행
   emailInput.addEventListener('keydown', e => { if (e.key === 'Enter') passwordInput.focus(); });
   passwordInput.addEventListener('keydown', e => {
     if (e.key !== 'Enter') return;
     const isLogin = [...authTabs].find(t => t.classList.contains('active'))?.dataset.tab === 'login';
-    if (isLogin) loginBtn.click(); else signupBtn.click();
+    if (isLogin) loginBtn.click(); else confirmInput.focus();
   });
+  confirmInput.addEventListener('keydown', e => { if (e.key === 'Enter') signupBtn.click(); });
 
   // ── 로그아웃 ───────────────────────────────────────────────────────────
   logoutBtn.addEventListener('click', () => db.auth.signOut());
