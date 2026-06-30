@@ -106,6 +106,8 @@ if (typeof document !== 'undefined') {
       appBarAuth.hidden = false;
       loginScreen.hidden = true;
       appScreen.hidden = false;
+      todos = [];
+      render();
       todos = await fetchTodos();
       render();
       input.focus();
