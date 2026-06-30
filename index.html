@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>오늘 할일</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="app-bar">
+    <span class="material-icons app-bar-icon">checklist_rtl</span>
+    <h1 class="app-bar-title">오늘 할일</h1>
+  </header>
+
+  <main class="content">
+    <!-- 입력 카드 -->
+    <div class="card input-card">
+      <input
+        type="text"
+        id="todo-input"
+        class="text-field"
+        placeholder="할 일을 입력하세요"
+        maxlength="100"
+        autofocus
+      >
+      <div class="input-actions">
+        <select id="priority-input" class="priority-input-select" aria-label="우선순위 선택">
+          <option value="high">높음</option>
+          <option value="medium" selected>중간</option>
+          <option value="low">낮음</option>
+        </select>
+        <button id="add-btn" class="btn-contained">
+          <span class="material-icons" aria-hidden="true">add</span>
+          <span>추가</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- 필터 칩 -->
+    <div class="filter-chips">
+      <button class="chip active" data-filter="all">전체</button>
+      <button class="chip" data-filter="active">미완료</button>
+      <button class="chip" data-filter="completed">완료</button>
+    </div>
+
+    <!-- Todo 목록 -->
+    <ul id="todo-list" class="todo-list"></ul>
+
+    <p id="active-count" class="count-text"></p>
+  </main>
+
+  <script src="todo.js"></script>
+</body>
+</html>
