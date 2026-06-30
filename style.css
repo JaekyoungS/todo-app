@@ -306,6 +306,30 @@ body {
 /* 아이콘 버튼 내부 요소가 클릭 이벤트 가로채지 않도록 */
 .icon-btn * { pointer-events: none; }
 
+/* ── 로딩 스피너 ─────────────────────────────────────────────────────── */
+.loading-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 20px 16px;
+  color: var(--md-on-surface-med);
+  font-size: .875rem;
+}
+
+.loading-spinner {
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--md-divider);
+  border-top-color: var(--md-primary);
+  border-radius: 50%;
+  flex-shrink: 0;
+  animation: spin .8s linear infinite;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
 /* ── 남은 항목 수 ─────────────────────────────────────────────────────── */
 .count-text {
   margin-top: 16px;

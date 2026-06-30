@@ -102,12 +102,12 @@ if (typeof document !== 'undefined') {
   // ── 인증 상태 감지 ─────────────────────────────────────────────────────
   db.auth.onAuthStateChange(async (_event, session) => {
     if (session) {
+      todos = [];
       userEmailEl.textContent = session.user.email;
       appBarAuth.hidden = false;
       loginScreen.hidden = true;
       appScreen.hidden = false;
-      todos = [];
-      render();
+      list.innerHTML = '<li class="loading-item"><span class="loading-spinner"></span>할 일을 불러오는 중...</li>';
       todos = await fetchTodos();
       render();
       input.focus();
